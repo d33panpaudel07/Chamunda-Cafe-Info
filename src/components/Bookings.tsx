@@ -18,7 +18,7 @@ export function Bookings() {
     if (!formData.fullName || !formData.date || !formData.time) return;
 
     const message = `${formData.type || 'Reservation'} for ${formData.date}, ${formData.time} with about ${formData.guests} requested by ${formData.fullName}, ${formData.phone}${formData.requests ? `\n\nNotes: ${formData.requests}` : ''}`;
-    window.open(`https://wa.me/9779823301556?text=${encodeURIComponent(message)}`, '_blank');
+    window.location.href = `https://wa.me/9779823301556?text=${encodeURIComponent(message)}`;
   };
 
   return (
