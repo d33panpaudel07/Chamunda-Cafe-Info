@@ -45,12 +45,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const getQty = (name: string) => cart.find(item => item.name === name)?.quantity || 0;
 
-  const handleOrder = () => {
-    if (cart.length === 0) return;
-    const text = cart.map(i => `${i.name} x${i.quantity} (${i.price})`).join('\n');
-    window.open(`https://wa.me/9779823301556?text=${encodeURIComponent("Order Details:\n" + text)}`, '_blank');
-  };
-
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
@@ -138,12 +132,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                     <span className="font-medium text-ink-soft">Total Items</span>
                     <span className="mono font-bold text-lg">{totalItems}</span>
                   </div>
-                  <button 
-                    onClick={handleOrder}
-                    className="w-full bg-accent text-accent-ink py-4 mono uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-[0.98] transition-all rounded-[2px] shadow-lg"
+                  <a 
+                    href={`https://wa.me/9779823301556?text=${encodeURIComponent("Order Details:\n" + cart.map(i => `${i.name} x${i.quantity} (${i.price})`).join('\n'))}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center bg-accent text-accent-ink py-4 mono uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-[0.98] transition-all rounded-[2px] shadow-lg"
                   >
                     Order via WhatsApp
-                  </button>
+                  </a>
                 </div>
               )}
             </motion.div>
