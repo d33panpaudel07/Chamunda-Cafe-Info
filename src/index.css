@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --paper: #fffdf7;
-    --paper-2: #f5eedc;
-    --ink: #2d1b11;
-    --ink-2: #3e271a;
-    --ink-soft: #755a4c;
-    --rule: #e5d5be;
-    --accent: #d32f2f;
+    --paper: #fffdf9;
+    --paper-2: #f2ebd9;
+    --ink: #4a2c11;
+    --ink-2: #6b472a;
+    --ink-soft: #a88d77;
+    --rule: #e8dbcc;
+    --accent: #B62525;
     --accent-gold: #fbc02d;
     --accent-ink: #ffffff;
   }

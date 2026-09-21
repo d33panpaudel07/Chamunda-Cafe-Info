@@ -13,6 +13,7 @@ import { Testimonials } from './components/Testimonials';
 import { Delivery } from './components/Delivery';
 import { Instagram } from './components/Instagram';
 import { Bookings } from './components/Bookings';
+import { Location } from './components/Location';
 import { Footer } from './components/Footer';
 
 function HomePage() {
@@ -29,6 +30,7 @@ function HomePage() {
       <Delivery />
       <Instagram />
       <Bookings />
+      <Location />
     </>
   );
 }
