@@ -5,7 +5,8 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Marquee } from './components/Marquee';
 import { About } from './components/About';
-import { Offerings } from './components/Offerings';
+import { Combos } from './components/Combos';
+import { Signatures } from './components/Signatures';
 import { Menu } from './components/Menu';
 import { Gallery } from './components/Gallery';
 import { Testimonials } from './components/Testimonials';
@@ -20,7 +21,8 @@ function HomePage() {
       <Hero />
       <Marquee />
       <About />
-      <Offerings />
+      <Combos />
+      <Signatures />
       <Menu />
       <Gallery />
       <Testimonials />
@@ -30,6 +32,8 @@ function HomePage() {
     </>
   );
 }
+
+import { CartProvider } from './components/CartProvider';
 
 function App() {
   const lenisRef = useRef<Lenis | null>(null);
@@ -59,7 +63,7 @@ function App() {
         e.preventDefault();
         const element = document.querySelector(anchor.hash);
         if (element) {
-          lenis.scrollTo(element, { offset: 0 });
+          (lenis as any).scrollTo(element, { offset: 0 });
           // Update URL without page jump
           window.history.pushState(null, '', anchor.hash);
         }
@@ -76,13 +80,15 @@ function App() {
 
   return (
     <Router>
-      <Navbar />
-      <main>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-        </Routes>
-      </main>
-      <Footer />
+      <CartProvider>
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+        </main>
+        <Footer />
+      </CartProvider>
     </Router>
   );
 }

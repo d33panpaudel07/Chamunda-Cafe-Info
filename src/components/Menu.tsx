@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../lib/utils';
+import { useCart } from './CartProvider';
 
 const menuData = {
   'Sekuwa & Chhoila': [
@@ -31,38 +32,10 @@ const menuData = {
 
 type Tab = keyof typeof menuData;
 
-type CartItem = {
-  name: string;
-  quantity: number;
-};
-
 export function Menu() {
   const tabs = Object.keys(menuData) as Tab[];
   const [activeTab, setActiveTab] = useState<Tab>(tabs[0]);
-  const [cart, setCart] = useState<CartItem[]>([]);
-
-  const updateCart = (name: string, delta: number) => {
-    setCart(prev => {
-      const existing = prev.find(item => item.name === name);
-      if (existing) {
-        const nextQty = existing.quantity + delta;
-        if (nextQty <= 0) return prev.filter(item => item.name !== name);
-        return prev.map(item => item.name === name ? { ...item, quantity: nextQty } : item);
-      }
-      if (delta > 0) {
-        return [...prev, { name, quantity: delta }];
-      }
-      return prev;
-    });
-  };
-
-  const getQty = (name: string) => cart.find(item => item.name === name)?.quantity || 0;
-
-  const handleOrder = () => {
-    if (cart.length === 0) return;
-    const text = cart.map(i => `${i.name} x${i.quantity}`).join('\n');
-    window.open(`https://wa.me/9779823301556?text=${encodeURIComponent("Order Details:\n" + text)}`, '_blank');
-  };
+  const { addToCart, getQty } = useCart();
 
   return (
     <section id="menu" className="py-16 px-6 max-w-[1600px] mx-auto w-full relative">
@@ -77,7 +50,7 @@ export function Menu() {
             onClick={() => setActiveTab(tab)}
             data-magnetic
             className={cn(
-              "px-6 py-2 mono rounded-[2px] transition-colors",
+              "px-6 py-2 mono rounded-[2px] transition-all duration-300",
               activeTab === tab ? "bg-ink text-paper" : "bg-transparent text-ink hover:bg-paper-2"
             )}
           >
@@ -118,9 +91,9 @@ export function Menu() {
                       {item.price}
                     </div>
                     <div className="flex items-center border border-rule rounded-[2px] bg-paper">
-                      <button onClick={() => updateCart(item.name, -1)} className="px-3 py-1 hover:bg-paper-2 text-ink-soft hover:text-ink transition-colors">-</button>
+                      <button onClick={() => addToCart(item.name, item.price, -1)} className="px-3 py-1 hover:bg-paper-2 text-ink-soft hover:text-ink active:scale-95 transition-all">-</button>
                       <span className="mono w-6 text-center">{getQty(item.name)}</span>
-                      <button onClick={() => updateCart(item.name, 1)} className="px-3 py-1 hover:bg-paper-2 text-ink-soft hover:text-ink transition-colors">+</button>
+                      <button onClick={() => addToCart(item.name, item.price, 1)} className="px-3 py-1 hover:bg-paper-2 text-ink-soft hover:text-ink active:scale-95 transition-all">+</button>
                     </div>
                   </div>
                 </div>
@@ -129,27 +102,6 @@ export function Menu() {
           </motion.div>
         </AnimatePresence>
       </div>
-
-      <AnimatePresence>
-        {cart.length > 0 && (
-          <motion.div 
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed bottom-6 right-6 z-[100]"
-          >
-            <div className="bg-ink text-paper p-4 rounded-[2px] shadow-2xl flex items-center gap-6 border border-rule/20">
-              <div className="flex flex-col">
-                <span className="mono text-[12px] opacity-70">Your Order</span>
-                <span className="font-medium">{cart.reduce((acc, item) => acc + item.quantity, 0)} items</span>
-              </div>
-              <button onClick={handleOrder} className="bg-accent text-accent-ink px-6 py-3 mono rounded-[2px] hover:bg-accent-gold hover:text-ink transition-colors shadow-lg">
-                Order via WhatsApp
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }
