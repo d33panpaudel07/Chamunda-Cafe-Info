@@ -216,7 +216,7 @@ export function Menu() {
                 </motion.div>
               )}
               
-              {displayedCategories.map((cat, catIdx) => (
+              {displayedCategories.map((cat) => (
                 <motion.div
                   key={cat.title + (searchTerm ? '-search' : '-tab')}
                   initial={{ opacity: 0, y: 10 }}
